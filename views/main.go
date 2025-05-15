@@ -49,5 +49,5 @@ func Init() {
 	}))
 
 	api = humabunrouter.New(Router, config)
-	todosViews()
+	todos()
 }

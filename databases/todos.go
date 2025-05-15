@@ -11,7 +11,7 @@ import (
 	"github.com/xonha/huma/models"
 )
 
-var DB *bun.DB
+var Todos *bun.DB
 
 func Init() {
 	sqldb, err := sql.Open(sqliteshim.ShimName, "todos.db")
@@ -19,11 +19,11 @@ func Init() {
 		log.Fatalf("Failed to open DB: %v", err)
 	}
 
-	DB = bun.NewDB(sqldb, sqlitedialect.New())
+	Todos = bun.NewDB(sqldb, sqlitedialect.New())
 
 	// Create the table if it doesn't exist
 	ctx := context.Background()
-	_, err = DB.NewCreateTable().
+	_, err = Todos.NewCreateTable().
 		Model((*models.Todo)(nil)). // <- this requires Todo model here
 		IfNotExists().
 		Exec(ctx)

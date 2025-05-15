@@ -7,7 +7,7 @@ import (
 	"github.com/xonha/huma/controllers"
 )
 
-func todosViews() {
+func todos() {
 	group := huma.NewGroup(api, "/todos")
 	group.UseSimpleModifier(func(op *huma.Operation) {
 		op.Tags = []string{"Todos"}

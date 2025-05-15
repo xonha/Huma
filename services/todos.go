@@ -13,7 +13,7 @@ func CreateTodo(ctx context.Context, title string, completed bool) (*models.Todo
 		Title:     title,
 		Completed: completed,
 	}
-	_, err := databases.DB.NewInsert().Model(todo).Exec(ctx)
+	_, err := databases.Todos.NewInsert().Model(todo).Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -27,7 +27,7 @@ func UpdateTodoById(ctx context.Context, idStr string, title string, completed b
 		Title:     title,
 		Completed: completed,
 	}
-	_, err := databases.DB.NewUpdate().Model(todo).WherePK().Exec(ctx)
+	_, err := databases.Todos.NewUpdate().Model(todo).WherePK().Exec(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -36,19 +36,19 @@ func UpdateTodoById(ctx context.Context, idStr string, title string, completed b
 
 func GetTodos(ctx context.Context) ([]models.Todo, error) {
 	var todos []models.Todo
-	err := databases.DB.NewSelect().Model(&todos).Order("id ASC").Scan(ctx)
+	err := databases.Todos.NewSelect().Model(&todos).Order("id ASC").Scan(ctx)
 	return todos, err
 }
 
 func GetTodoById(ctx context.Context, idStr string) (*models.Todo, error) {
 	id, _ := strconv.ParseInt(idStr, 10, 64)
 	todo := new(models.Todo)
-	err := databases.DB.NewSelect().Model(todo).Where("id = ?", id).Scan(ctx)
+	err := databases.Todos.NewSelect().Model(todo).Where("id = ?", id).Scan(ctx)
 	return todo, err
 }
 
 func DeleteTodoById(ctx context.Context, idStr string) error {
 	id, _ := strconv.ParseInt(idStr, 10, 64)
-	_, err := databases.DB.NewDelete().Model(&models.Todo{}).Where("id = ?", id).Exec(ctx)
+	_, err := databases.Todos.NewDelete().Model(&models.Todo{}).Where("id = ?", id).Exec(ctx)
 	return err
 }
