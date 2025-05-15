@@ -3,6 +3,7 @@ module github.com/xonha/huma
 go 1.24.3
 
 require (
+	github.com/akrylysov/algnhsa v1.1.0
 	github.com/danielgtaylor/huma/v2 v2.32.0
 	github.com/uptrace/bun v1.2.11
 	github.com/uptrace/bun/dialect/sqlitedialect v1.2.11
@@ -11,6 +12,7 @@ require (
 )
 
 require (
+	github.com/aws/aws-lambda-go v1.43.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect

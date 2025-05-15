@@ -14,17 +14,16 @@ import (
 var Todos *bun.DB
 
 func Init() {
-	sqldb, err := sql.Open(sqliteshim.ShimName, "todos.db")
+	sqldb, err := sql.Open(sqliteshim.ShimName, ":memory:")
 	if err != nil {
 		log.Fatalf("Failed to open DB: %v", err)
 	}
 
 	Todos = bun.NewDB(sqldb, sqlitedialect.New())
 
-	// Create the table if it doesn't exist
 	ctx := context.Background()
 	_, err = Todos.NewCreateTable().
-		Model((*models.Todo)(nil)). // <- this requires Todo model here
+		Model((*models.Todo)(nil)).
 		IfNotExists().
 		Exec(ctx)
 	if err != nil {

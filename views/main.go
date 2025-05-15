@@ -32,7 +32,7 @@ func Init() {
 			},
 		},
 	}
-	Router.GET("/docs", bunrouter.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	Router.GET("/", bunrouter.HTTPHandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
 		w.Write([]byte(`<!doctype html>
 		<html>
