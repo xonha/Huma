@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,23 +9,13 @@ import (
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humabunrouter"
 	"github.com/danielgtaylor/huma/v2/humacli"
-	"github.com/uptrace/bun"
-	"github.com/uptrace/bun/dialect/sqlitedialect"
-	"github.com/uptrace/bun/driver/sqliteshim"
 	"github.com/uptrace/bunrouter"
+	"github.com/xonha/huma/db"
+	"github.com/xonha/huma/models"
 )
 
 type Options struct {
 	Port int `help:"Port to listen on" short:"p" default:"3000"`
-}
-
-// Todo model
-type Todo struct {
-	bun.BaseModel `bun:"table:todos,alias:t"`
-
-	ID        int64  `bun:",pk,autoincrement" json:"id"`
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
 }
 
 type TodoInput struct {
@@ -37,11 +26,11 @@ type TodoInput struct {
 }
 
 type TodoOutput struct {
-	Body *Todo `json:"todo"`
+	Body *models.Todo `json:"todo"`
 }
 
 type TodoListOutput struct {
-	Body []Todo `json:"todos"`
+	Body []models.Todo `json:"todos"`
 }
 
 type UpdateTodoInput struct {
@@ -52,26 +41,8 @@ type UpdateTodoInput struct {
 	}
 }
 
-var db *bun.DB
-
 func main() {
-	ctx := context.Background()
-
-	sqldb, err := sql.Open(sqliteshim.ShimName, "todos.db")
-	if err != nil {
-		panic(err)
-	}
-	defer sqldb.Close()
-
-	db = bun.NewDB(sqldb, sqlitedialect.New())
-
-	_, err = db.NewCreateTable().
-		Model((*Todo)(nil)).
-		IfNotExists().
-		Exec(ctx)
-	if err != nil {
-		panic(err)
-	}
+	db.Init()
 
 	cli := humacli.New(func(hooks humacli.Hooks, options *Options) {
 		router := bunrouter.New()
@@ -129,11 +100,11 @@ func main() {
 			Summary:       "Create a new todo",
 			DefaultStatus: http.StatusCreated,
 		}, func(ctx context.Context, input *TodoInput) (*TodoOutput, error) {
-			todo := &Todo{
+			todo := &models.Todo{
 				Title:     input.Body.Title,
 				Completed: input.Body.Completed,
 			}
-			_, err := db.NewInsert().Model(todo).Exec(ctx)
+			_, err := db.DB.NewInsert().Model(todo).Exec(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -146,8 +117,8 @@ func main() {
 			Path:        "/",
 			Summary:     "Get all todos",
 		}, func(ctx context.Context, _ *struct{}) (*TodoListOutput, error) {
-			var todos []Todo
-			err := db.NewSelect().Model(&todos).Order("id ASC").Scan(ctx)
+			var todos []models.Todo
+			err := db.DB.NewSelect().Model(&todos).Order("id ASC").Scan(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -164,8 +135,8 @@ func main() {
 		},
 		) (*TodoOutput, error) {
 			id, _ := strconv.ParseInt(input.ID, 10, 64)
-			todo := new(Todo)
-			err := db.NewSelect().Model(todo).Where("id = ?", id).Scan(ctx)
+			todo := new(models.Todo)
+			err := db.DB.NewSelect().Model(todo).Where("id = ?", id).Scan(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -179,12 +150,12 @@ func main() {
 			Summary:     "Update a todo by ID",
 		}, func(ctx context.Context, input *UpdateTodoInput) (*TodoOutput, error) {
 			id, _ := strconv.ParseInt(input.ID, 10, 64)
-			todo := &Todo{
+			todo := &models.Todo{
 				ID:        id,
 				Title:     input.Body.Title,
 				Completed: input.Body.Completed,
 			}
-			_, err := db.NewUpdate().Model(todo).WherePK().Exec(ctx)
+			_, err := db.DB.NewUpdate().Model(todo).WherePK().Exec(ctx)
 			if err != nil {
 				return nil, err
 			}
@@ -201,7 +172,7 @@ func main() {
 		},
 		) (*struct{}, error) {
 			id, _ := strconv.ParseInt(input.ID, 10, 64)
-			_, err := db.NewDelete().Model(&Todo{}).Where("id = ?", id).Exec(ctx)
+			_, err := db.DB.NewDelete().Model(&models.Todo{}).Where("id = ?", id).Exec(ctx)
 			return &struct{}{}, err
 		})
 
