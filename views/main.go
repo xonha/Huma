@@ -15,7 +15,7 @@ var (
 
 func Init() {
 	Router = bunrouter.New()
-	config := huma.DefaultConfig("My API", "1.0.0")
+	config := huma.DefaultConfig("API Todos", "1.0.0")
 	config.DocsPath = ""
 	config.Components.SecuritySchemes = map[string]*huma.SecurityScheme{
 		"Bearer": {
@@ -37,12 +37,18 @@ func Init() {
 		w.Write([]byte(`<!doctype html>
 		<html>
 			<head>
-				<title>API Reference</title>
+				<title>API Todos</title>
+				<link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/67/Microsoft_To-Do_icon.png" type="image/png">
 				<meta charset="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
 			</head>
 			<body>
 				<script id="api-reference" data-url="/openapi.json"></script>
+				<script>
+					var configuration = { theme: 'purple' }
+					document.getElementById('api-reference').dataset.configuration =
+						JSON.stringify(configuration)
+				</script>
 				<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
 			</body>
 		</html>`))
