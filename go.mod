@@ -1,4 +1,4 @@
-module github.com/xonha/huma
+module github.com/xonha/todos
 
 go 1.24.3
 

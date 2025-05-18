@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/xonha/huma/controllers"
+	"github.com/xonha/todos/controllers"
 )
 
 func todos() {

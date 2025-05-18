@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/akrylysov/algnhsa"
-	"github.com/xonha/huma/databases"
-	"github.com/xonha/huma/views"
+	"github.com/xonha/todos/databases"
+	"github.com/xonha/todos/views"
 )
 
 func main() {

@@ -8,7 +8,7 @@ import (
 	"github.com/uptrace/bun"
 	"github.com/uptrace/bun/dialect/sqlitedialect"
 	"github.com/uptrace/bun/driver/sqliteshim"
-	"github.com/xonha/huma/models"
+	"github.com/xonha/todos/models"
 )
 
 var Todos *bun.DB

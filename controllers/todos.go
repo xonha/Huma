@@ -3,8 +3,8 @@ package controllers
 import (
 	"context"
 
-	"github.com/xonha/huma/schemas"
-	"github.com/xonha/huma/services"
+	"github.com/xonha/todos/schemas"
+	"github.com/xonha/todos/services"
 )
 
 func CreateTodo(ctx context.Context, input *schemas.TodoInput) (*schemas.TodoOutput, error) {
