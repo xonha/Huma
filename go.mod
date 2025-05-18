@@ -1,4 +1,4 @@
-module github.com/xonha/todos
+module github.com/xonha/TodosGo
 
 go 1.24.3
 

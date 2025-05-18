@@ -1,6 +1,6 @@
 package schemas
 
-import "github.com/xonha/todos/models"
+import "github.com/xonha/TodosGo/models"
 
 type TodoInput struct {
 	Body struct {

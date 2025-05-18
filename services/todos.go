@@ -4,8 +4,8 @@ import (
 	"context"
 	"strconv"
 
-	"github.com/xonha/todos/databases"
-	"github.com/xonha/todos/models"
+	"github.com/xonha/TodosGo/databases"
+	"github.com/xonha/TodosGo/models"
 )
 
 func CreateTodo(ctx context.Context, title string, completed bool) (*models.Todo, error) {
