@@ -1,8 +1,15 @@
 version = 0.1
-[default.deploy.parameters]
-stack_name = "plambas"
+
+[dev.deploy.parameters]
+stack_name = "dev-todos-api"
 resolve_s3 = true
-s3_prefix = "plambas"
+s3_prefix = "dev-todos-api"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
-image_repositories = []
+
+[prd.deploy.parameters]
+stack_name = "prd-todos-api"
+resolve_s3 = true
+s3_prefix = "prd-todos-api"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM"
